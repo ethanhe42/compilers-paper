@@ -7,6 +7,29 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{listings}
+\usepackage{color}
+\usepackage{pgffor}
+\usepackage[toc,page]{appendix}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+	language=C,
+	aboveskip=3mm,
+	belowskip=3mm,
+	showstringspaces=false,
+	columns=flexible,
+	basicstyle={\small\ttfamily},
+	numbers=none,
+	numberstyle=\tiny\color{gray},
+	keywordstyle=\color{blue},
+	commentstyle=\color{dkgreen},
+	stringstyle=\color{mauve},
+	breaklines=true,
+	breakatwhitespace=true,
+	tabsize=3
+}
 \setlength{\parindent}{2em}
 \renewcommand{\contentsname}{目录}
 \renewcommand{\listfigurename}{插图目录}
@@ -16,10 +39,11 @@
 \renewcommand{\indexname}{索引}
 \renewcommand{\tablename}{表}
 \renewcommand{\figurename}{图}
+\renewcommand{\appendixname}{附录}
 %opening
 \date{2016年11月}
-\title{基于神经网络的sin函数拟合实验报告}
-\author{何宜晖\\计算机46\\2140504137\\heyihui@stu.xjtu.edu.cn}
+\title{词法分析实验报告}
+\author{何宜晖\\计算机46\\2140504137\\电信学院\\heyihui@stu.xjtu.edu.cn}
 
 \begin{document}
 \begin{CJK}{UTF8}{gkai}
@@ -32,18 +56,46 @@
 
 \maketitle
 \clearpage
-\section{实验内容}
 \section{实验目的}
+\begin{enumerate}
+	\item 强化对系统软件综合工程实现能力的训练
+	\item 加强对词法分析原理、方法和基本实现技术的理解
+\end{enumerate}
 
-\section{实验原理}
-
+\section{实验内容}
+用C语言或者其他的高级语言作为宿主语言完成C1语言的词法分析器的设计和实现。
 \section{具体实现}
+该程序要实现的是一个读程序的过程，从输入的源程序中，识别出各种类型的单词(基本保留字、标识符、常数、运算符、分隔符)。输出并打印各个单词的类型以及本身.\cite{chen2000} \cite{appel2004modern} 
+
+类型名按照实验指导书定义，部分未出现的，参照 ANSI C \cite{ansic}
+
+分析部分，可以开启yylineao，用于打开自动记录行号\verb|%option yylineao|。
+匹配到的词可以用\verb|yytext|直接获取。
+
+主程序部分，\verb|yyin|将读取到的文件传送给lex。 \verb|yylex()| 则开始词法分析，每个匹配到的词，都会执行后面动作。\cite{levine1992lex}\cite{lesk1975lex}
+\subsection{注释的跳过}
+读到\verb|\\|我们就吃掉整行。
+读到\verb|\*|我们进入注释程序\verb|comment()|. 一直读取，直到读到\verb|*/|为止，否则报错。
+
+\section{程序代码}
+\lstinputlisting[language=c]{../c-compiler/q1.l}
 
 \section{实验总结}
-
 {\small
 	\bibliographystyle{ieee}
 	\bibliography{he16yacc}
 }
+\clearpage
+
+\appendix
+\section{样例代码与输出}
+
+\foreach \n in {orig.c,simple.c,test.c,test2.c,testlex.c,testparser.c}{
+	 $c_0$ 语言文件 \n
+	\lstinputlisting[language=c]{../c-compiler/test/\n}
+	$c_0$ 语言文件 \n 的输出
+	\lstinputlisting[language=xml]{../c-compiler/test/\n.lex.xml}
+}
+
 \end{CJK}
 \end{document}
