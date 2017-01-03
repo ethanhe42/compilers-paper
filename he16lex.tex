@@ -108,7 +108,7 @@
 \section{程序结构描述}
 \subsection{语法设计}
 \subsubsection{ifelse}
-本程序有一个shift/reduce 冲突：
+本程序有一个\textbf{移进归约冲突}：
 \begin{verbatim}
   IF '(' expression ')' statement _ ELSE statement
 \end{verbatim}
@@ -132,7 +132,7 @@ additive_expression
 \end{verbatim}
 
 \subsubsection{$++,--$运算}
-这是在c，c0,c++等语言中的特殊语法。如果在词法分析时，只单个提取+，-。后面是无法区分--i与-(-i)的。故需要定义两个单独的token，与+，-区别开来。
+这是在c，c0,c++等语言中的特殊语法。如果在词法分析时，只单个提取+，-。后面是无法区分--i与-(-i)的，会有\textbf{归约-归约冲突}。故需要定义两个单独的token，与+，-区别开来。
 \begin{verbatim}
 %token INC_OP DEC_OP
 \end{verbatim}
@@ -215,7 +215,7 @@ struct treeNode * newnode(int lineNo, char* nodeType, char* string, char* value,
 \end{lstlisting}
 
 \subsection{打印语法树}
-为了打印语法树，需要单独设定一个非终结符atree在程序开始，它没有任何语法意义，仅仅是为了用来打印语法树。
+为了打印语法树，需要使用\textbf{拓广文法}。单独设定一个非终结符atree在程序开始，它没有任何语法意义，仅仅是为了开始节点有区分性，用来打印语法树。
 \begin{verbatim}
 %start atree
 %%
